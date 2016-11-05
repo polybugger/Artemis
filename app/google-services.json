@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1092138175454",
+    "firebase_url": "https://artemis-cc42f.firebaseio.com",
+    "project_id": "artemis-cc42f",
+    "storage_bucket": "artemis-cc42f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092138175454:android:290833015e4270cf",
+        "android_client_info": {
+          "package_name": "net.polybugger.artemis"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092138175454-m2bipa9cugmldgk4lqge5jji8k02gmjg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.polybugger.artemis",
+            "certificate_hash": "2AF1FD4BEAEC031FF7F5B843E0B9CB6F00A0D330"
+          }
+        },
+        {
+          "client_id": "1092138175454-an2if520udlkrsmmpk59nlo5oqh7dil6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9TvNDUgtfbinYRz9rAd2scgFvP2wOLLI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092138175454-an2if520udlkrsmmpk59nlo5oqh7dil6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
