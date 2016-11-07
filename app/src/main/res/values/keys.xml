@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preferences_file">net.polybugger.artemis.preferences_file</string>
+    <string name="preference_is_signed_in_key">net.polybugger.artemis.preference_is_signed_in_key</string>
+    <bool name="preference_default_is_signed_in">false</bool>
+    <string name="preference_sign_in_method_key">net.polybugger.artemis.preference_sign_in_method_key</string>
+    <string name="preference_default_sign_in_method">ANONYMOUS</string>
+    <string name="preference_sign_in_email_key">net.polybugger.artemis.preference_sign_in_email_key</string>
+    <string name="preference_sign_in_password_key">net.polybugger.artemis.preference_sign_in_password_key</string>
+
+</resources>
