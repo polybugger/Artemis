@@ -11,4 +11,6 @@
     <dimen name="edit_text_text_view_padding_left">4dp</dimen>
     <dimen name="edit_text_text_view_padding_right">4dp</dimen>
 
+    <dimen name="fab_margin">16dp</dimen>
+
 </resources>

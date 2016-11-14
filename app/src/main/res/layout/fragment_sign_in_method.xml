@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -18,27 +19,107 @@
         <EditText
             android:id="@+id/email_edit_text"
             android:hint="@string/email"
+            android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:selectAllOnFocus="true"
             android:textSize="@dimen/normal_text_size" />
 
         <EditText
             android:id="@+id/password_edit_text"
             android:hint="@string/password"
+            android:imeOptions="actionSend"
             android:inputType="textPassword"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:selectAllOnFocus="true"
             android:textSize="@dimen/normal_text_size" />
 
         <TextView
-            android:id="@+id/password_error_text_view"
+            android:id="@+id/email_password_error_text_view"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:paddingLeft="@dimen/edit_text_text_view_padding_left"
-            android:paddingRight="@dimen/edit_text_text_view_padding_right"
-            android:textColor="@color/color_error"
+            android:paddingStart="@dimen/edit_text_text_view_padding_left"
+            android:paddingEnd="@dimen/edit_text_text_view_padding_right"
+            android:textColor="?android:textColorHighlight"
             android:textSize="@dimen/small_text_size" />
+
+        <LinearLayout
+            android:gravity="end"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/email_password_clear_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/clear" />
+
+            <Button
+                android:id="@+id/email_password_sign_in_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/sign_in" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            style="?android:attr/buttonBarStyle" >
+
+            <Button
+                android:id="@+id/email_password_sign_up_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/sign_up"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textAllCaps="false"
+                android:textSize="@dimen/normal_text_size" />
+
+            <Button
+                android:id="@+id/email_password_forgot_password_button"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/forgot_password"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textAllCaps="false"
+                android:textSize="@dimen/normal_text_size" />
+
+        </LinearLayout>
+
+        <View style="@style/AppListDivider"
+            android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in_button"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <View style="@style/AppListDivider"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/facebook_sign_in_button"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content" />
+
+        <View style="@style/AppListDivider"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin" />
+
+        <Button
+            android:id="@+id/anonymous_sign_in_button"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/sign_in_as_guest" />
 
     </LinearLayout>
 
