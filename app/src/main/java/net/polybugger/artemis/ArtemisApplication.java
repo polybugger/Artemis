@@ -10,7 +10,7 @@ public class ArtemisApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext(), SignInActivity.RC_FACEBOOK);
         AppEventsLogger.activateApp(this);
     }
 }

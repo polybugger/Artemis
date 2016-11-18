@@ -17,7 +17,10 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class SignInMethodFragment extends Fragment {
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.common.SignInButton;
+
+public class SignInMethodFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "net.polybugger.artemis.sign_in_method_fragment";
 
@@ -112,32 +115,45 @@ public class SignInMethodFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.email_password_clear_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        view.findViewById(R.id.email_password_clear_button).setOnClickListener(this);
+        view.findViewById(R.id.email_password_sign_in_button).setOnClickListener(this);
+        mEmailEditText.requestFocus();
+
+        SignInButton signInButton = (SignInButton) view.findViewById(R.id.google_sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setOnClickListener(this);
+
+        LoginButton facebookLoginButton = (LoginButton) view.findViewById(R.id.facebook_sign_in_button);
+        //facebookLoginButton.setOnClickListener(this);
+        facebookLoginButton.setReadPermissions("email", "public_profile");
+        //facebookLoginButton.setFragment(this);
+
+        view.findViewById(R.id.anonymous_sign_in_button).setOnClickListener(this);
+
+        return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.email_password_clear_button:
                 mEmailEditText.setText(null);
                 mPasswordEditText.setText(null);
                 mEmailEditText.requestFocus();
-            }
-        });
-
-        view.findViewById(R.id.email_password_sign_in_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.email_password_sign_in_button:
                 emailPasswordSignIn();
-            }
-        });
-
-        view.findViewById(R.id.anonymous_sign_in_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                break;
+            case R.id.anonymous_sign_in_button:
                 mListener.signIn(null, null, SignInActivity.SignInMethod.ANONYMOUS);
-            }
-        });
-
-        mEmailEditText.requestFocus();
-
-        return view;
+                break;
+            case R.id.google_sign_in_button:
+                mListener.signIn(null, null, SignInActivity.SignInMethod.GOOGLE);
+                break;
+            case R.id.facebook_sign_in_button:
+                mListener.signIn(null, null, SignInActivity.SignInMethod.FACEBOOK);
+                break;
+        }
     }
 
     public void focusEmailPassword() {
@@ -165,4 +181,5 @@ public class SignInMethodFragment extends Fragment {
         }
         mListener.signIn(email, password, SignInActivity.SignInMethod.EMAIL_PASSWORD);
     }
+
 }

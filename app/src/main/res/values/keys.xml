@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="facebook_app_id">1193923450676794</string>
+    <string name="fb_login_protocol_scheme">fb1193923450676794</string>
 
     <string name="preferences_file">net.polybugger.artemis.preferences_file</string>
 
