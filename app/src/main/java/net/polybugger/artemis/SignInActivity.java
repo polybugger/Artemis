@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,8 +34,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Arrays;
+import java.util.Set;
 
-public class SignInActivity extends AppCompatActivity implements SignInMethodFragment.SignInListener {
+public class SignInActivity extends AppCompatActivity implements SignInMethodFragment.SignInListener,
+        GoogleApiClient.OnConnectionFailedListener {
 
     public static final int RC_GOOGLE_SIGN_IN = 1;
     public static final int RC_FACEBOOK = 7000;
@@ -56,26 +59,6 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FacebookSdk.sdkInitialize(getApplicationContext(), SignInActivity.RC_FACEBOOK);
-        mCallbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                facebookSign(loginResult.getAccessToken());
-            }
-            @Override
-            public void onCancel() { }
-            @Override
-            public void onError(FacebookException error) { }
-        });
-
-        setContentView(R.layout.activity_sign_in);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setTitle(R.string.sign_in);
-        }
-
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -92,9 +75,43 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, null /* OnConnectionFailedListener */)
+                .enableAutoManage(this /* FragmentActivity */, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        FacebookSdk.sdkInitialize(getApplicationContext(), SignInActivity.RC_FACEBOOK);
+        mCallbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken accessToken = loginResult.getAccessToken();
+                Set<String> declinedPermissions = accessToken.getDeclinedPermissions();
+                if(declinedPermissions.contains("email")) {
+                    LoginManager.getInstance().logOut();
+                    snackbarSignInFailed(false);
+                }
+                else {
+                    facebookSign(accessToken);
+                }
+            }
+            @Override
+            public void onCancel() {
+                LoginManager.getInstance().logOut();
+                snackbarSignInFailed(false);
+            }
+            @Override
+            public void onError(FacebookException error) {
+                LoginManager.getInstance().logOut();
+                snackbarSignInFailed(false);
+            }
+        });
+
+        setContentView(R.layout.activity_sign_in);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.sign_in);
+        }
 
         SharedPreferences sharedPrefs = getSharedPreferences(getString(R.string.preferences_file), MODE_PRIVATE);
         boolean isSignedIn = sharedPrefs.getBoolean(getString(R.string.preference_is_signed_in_key), getResources().getBoolean(R.bool.preference_default_is_signed_in));
@@ -132,11 +149,6 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
 
             String email = sharedPrefs.getString(getString(R.string.preference_sign_in_email_key), null);
             String password = sharedPrefs.getString(getString(R.string.preference_sign_in_password_key), null);
-
-            //isSignedIn = true;
-            //email = "polybugger@gmail.com";
-            //password = "masha723";
-            //signInMethod = SignInMethod.EMAIL_PASSWORD;
 
             signIn(email, password, signInMethod);
 
@@ -182,9 +194,8 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        switch(resultCode) {
-            case RC_GOOGLE_SIGN_IN:
+        switch(requestCode) {
+            case RC_GOOGLE_SIGN_IN: // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
                 googleSignIn(data);
                 break;
             default: // facebook
@@ -193,7 +204,15 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
                         mCallbackManager.onActivityResult(requestCode, resultCode, data);
                     }
                 }
+                else {
+                    snackbarSignInFailed(false);
+                }
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        snackbarSignInFailed(false);
     }
 
     @Override
@@ -328,6 +347,7 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
                     startMainActivity();
                 }
                 else {
+                    LoginManager.getInstance().logOut();
                     snackbarSignInFailed(false);
                 }
             }
@@ -343,6 +363,8 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
     }
 
     private void snackbarSignInFailed(boolean focusEmailTextEdit) {
+        SharedPreferences sharedPrefs = getSharedPreferences(getString(R.string.preferences_file), MODE_PRIVATE);
+        sharedPrefs.edit().putBoolean(getString(R.string.preference_is_signed_in_key), false).apply();
         Snackbar.make(findViewById(R.id.coordinator_layout), R.string.error_sign_in_failed, Snackbar.LENGTH_SHORT).show();
         FragmentManager fm = getSupportFragmentManager();
         SignInMethodFragment signInMethodFragment = (SignInMethodFragment) fm.findFragmentByTag(SignInMethodFragment.TAG);
