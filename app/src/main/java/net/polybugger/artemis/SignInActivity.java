@@ -75,7 +75,7 @@ public class SignInActivity extends AppCompatActivity implements SignInMethodFra
                 .requestEmail()
                 .build();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this)
+                .enableAutoManage(this /* FragmentActivity */, this /* GoogleApiClient.OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 

@@ -9,6 +9,7 @@
     <string name="sign_up">Sign up&#8230;</string>
     <string name="forgot_password">Forgot password?</string>
     <string name="sign_in_as_guest">Sign In as Guest&#8230;</string>
+    <string name="sign_out">Sign Out</string>
 
     <string name="error_email_required">Please enter a valid email!</string>
     <string name="error_password_required">Please enter password!</string>

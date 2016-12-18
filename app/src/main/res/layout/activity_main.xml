@@ -33,10 +33,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:context="net.polybugger.artemis.MainActivity">
 
-        <TextView
+        <Button
+            android:id="@+id/sign_out_button"
+            android:layout_gravity="center"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Hello World!" />
+            android:text="@string/sign_out" />
 
     </RelativeLayout>
 
